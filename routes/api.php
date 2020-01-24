@@ -16,3 +16,6 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Ruta del API para nuestro ws de gestion del array desde el FrontEnd
+Route::resource('arreglo', 'ArregloController');
