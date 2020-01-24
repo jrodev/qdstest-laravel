@@ -23,7 +23,7 @@ class ArregloController extends Controller
      */
     public function create()
     {
-        return ["v1"=>"text val", "v2"=>653];
+        return ["id"=>1, "input"=>[[2,8],[5,4]], "output"=>[[8,4],[2,5]], "created_at"=>"10/10/2019", "updated_at"=>"11/10/2019"];
     }
 
     /**

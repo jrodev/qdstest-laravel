@@ -18,4 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // Ruta del API para nuestro ws de gestion del array desde el FrontEnd
-Route::resource('arreglo', 'ArregloController');
+Route::resource('arreglo', 'ArregloController', ['middleware' => 'cors']);
