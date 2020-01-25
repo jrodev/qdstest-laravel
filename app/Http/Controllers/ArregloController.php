@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Arreglo;
 
 class ArregloController extends Controller
 {
@@ -34,7 +35,42 @@ class ArregloController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $arreglo = new Arreglo();
+        $arreglo->id = $request->id;
+        $arreglo->input = $request->input;
+        $arreglo->output = $request->output;
+
+        $aInp = $request->input;
+
+        $len = count($aInp);
+
+        // Guardamos los lados del cuadrado (array NxN)
+
+        $aTop    = $aInp[0];      // Parte superior del cuadrado
+        $aBottom = $aInp[$len-1]; // Parte inferior del cuadrado
+
+        // Nota: Los lados superior e inferior son primer y ulitmo array 
+        // del array multidimensional inicial
+        $aLeft = [];  // alamacena los primeros elementos de cada row (Lado Izq)
+        $aRight = []; // alamacena los Ultimos elementos de cada row  (Lado Der)
+
+        for ($y=0; $y < $len; $y++) {
+            
+            $row = $aInp[$y];
+            $aLeft[]  = $row[0];      // Primer elemento de este Row
+            $aRight[] = $row[$len-1]; // Ultimo elemento de este Row
+
+            // El nuevo primer elemento sera, el Ultimo del lado superior actual
+            $aInp[$y][0]      = $aTop[$len-($y+1)];
+            // El nuevo Ultimo elemento sera, el Ultimo del lado Inferior actual
+            $aInp[$y][$len-1] = $aBottom[$len-($y+1)];
+        }
+
+        // ahora solo cambiamos los lados superior e inferior
+        $aInp[0]      = $aRight;
+        $aInp[$len-1] = $aLeft;
+
+        return $aInp;
     }
 
     /**
