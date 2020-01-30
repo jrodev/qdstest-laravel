@@ -36,12 +36,64 @@ class ArregloController extends Controller
     public function store(Request $request)
     {
         $arreglo = new Arreglo();
+
+        // usaremos por esta vez este valor como flag
+        // para indicar rotacion de contorno o rotancion total del array
+        // 0: Rotacion de contorno, 1: rotacion total de array
+
+
+
         $arreglo->id = $request->id;
+
         $arreglo->input = $request->input;
         $arreglo->output = $request->output;
 
         $aInp = $request->input;
 
+        if($arreglo->id==0) {
+            $aInp = $this->rotacionContorno($aInp);
+        } 
+        else {
+            $aInp = $this->rotacionTotal($aInp);
+        } 
+        
+        return $aInp;
+    }
+
+    // Rotacion total de Array
+    private function rotacionTotal ($aInp)
+    {
+        $lenArray = $lenCols = count($aInp);
+
+        // Array multidimensional de todas la columnas
+        $aCols = [];
+
+        // Generando los arreglos internos vacios
+        while ($lenCols--) { $aCols[] = []; }
+
+        // Recorriendo el Array para almacenar cada columna
+        // en un row del nuevo array $aCols
+        for ($y=0; $y < $lenArray; $y++) {
+            
+            // Recorriendo un Row al revez
+            $xAsc = 0; // Recorrido Normal Ascendente
+            for ($xDesc=$lenArray-1; $xDesc >= 0; $xDesc--) { 
+                
+                // Si aun no se tiene un array para una fila
+                // que se convertira en columna se crea solo una vez
+                /*if( !key_exists($xDesc, $aCols) || !is_array($aCols[$xDesc]) ) { 
+                    $aCols[$xDesc] = []; 
+                }*/
+                $aCols[$xDesc][$y] = $aInp[$y][$xAsc++];
+            }
+        }
+        //var_dump ($aCols);
+        return $aCols;
+    }
+
+    // Rotacion de contorno de array
+    private function rotacionContorno (&$aInp)
+    {
         $len = count($aInp);
 
         // Guardamos los lados del cuadrado (array NxN)
